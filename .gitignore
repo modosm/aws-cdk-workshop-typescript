@@ -9,3 +9,6 @@ cdk.out
 
 # don't commit IDEA
 .idea
+
+# commit lambda code
+!lambda/*.js
