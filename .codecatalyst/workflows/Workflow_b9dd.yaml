@@ -51,48 +51,29 @@ Actions:
     DependsOn:
       - Build_a4
   AWSCDKdeploy_77:
-    # Identifies the action. Do not modify this value.
     Identifier: aws/cdk-deploy@v1.0.4
-
-    # Specifies the source and/or artifacts to pass to the action as input.
-    Inputs:
-      # Optional
-      Sources:
-        - WorkflowSource # This specifies that the action requires this Workflow as a source
-
-    # Required; You can use an environment, AWS account connection, and role to access AWS resources.
-    Environment:
-      Name:
-      Connections:
-        - Name:
-          Role:
-
-            # Defines the action's properties.
     Configuration:
-      # Required; type: string; description: Name of the stack to deploy
-      StackName:
-
-
+      Region: us-west-2
+      StackName: cdk-deploy-test
+    Environment:
+      Connections:
+        - Role: CodeCatalystWorkflowDevelopmentRole-matemodos
+          Name: "808383985203"
+      Name: cdk-test-env
+    DependsOn:
+      - Test_aa
+    Inputs:
+      Sources:
+        - WorkflowSource
   AWSCDKbootstrap_90:
-    # Identifies the action. Do not modify this value.
     Identifier: aws/cdk-bootstrap@v1.0.3
-
-    # Specifies the source and/or artifacts to pass to the action as input.
-    Inputs:
-      # Optional
-      Sources:
-        - WorkflowSource # This specifies that the action requires this Workflow as a source
-
-    # Required; You can use an environment, AWS account connection, and role to access AWS resources.
-    Environment:
-      Name:
-      Connections:
-        - Name:
-          Role:
-
-            # Defines the action's properties.
     Configuration:
-      # Required; type: string; description: AWS region to bootstrap
-      Region:
-
-
+      Region: us-west-2
+    Environment:
+      Connections:
+        - Role: CodeCatalystWorkflowDevelopmentRole-matemodos
+          Name: "808383985203"
+      Name: cdk-test-env
+    Inputs:
+      Sources:
+        - WorkflowSource
