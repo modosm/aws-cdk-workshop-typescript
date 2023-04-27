@@ -1,0 +1,98 @@
+Name: Workflow_b9dd
+SchemaVersion: "1.0"
+
+# Optional - Set automatic triggers.
+Triggers:
+  - Type: Push
+    Branches:
+      - main
+
+# Required - Define action configurations.
+Actions:
+  Build_a4:
+    Identifier: aws/build@v1.0.0
+    Inputs:
+      Sources:
+        - WorkflowSource
+    Outputs:
+      AutoDiscoverReports:
+        Enabled: true
+        ReportNamePrefix: rpt
+    Configuration:
+      Steps:
+        - Run: echo "Hello, World!"
+        - Run: echo "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" >> report.xml
+        - Run: echo "<testsuite tests=\"1\" name=\"TestAgentJunit\" >" >> report.xml
+        - Run: echo "<testcase classname=\"TestAgentJunit\" name=\"Dummy
+            Test\"/></testsuite>" >> report.xml
+    Compute:
+      Type: EC2
+    DependsOn:
+      - AWSCDKbootstrap_90
+  Test_aa:
+    Identifier: aws/managed-test@v1.0.0
+    Inputs:
+      Sources:
+        - WorkflowSource
+    Outputs:
+      AutoDiscoverReports:
+        Enabled: true
+        ReportNamePrefix: rpt
+    Configuration:
+      Steps:
+        - Run: run-tests -h
+        - Run: echo "Hello, World!"
+        - Run: echo "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" >> report.xml
+        - Run: echo "<testsuite tests=\"1\" name=\"TestAgentJunit\" >" >> report.xml
+        - Run: echo "<testcase classname=\"TestAgentJunit\" name=\"Dummy
+            Test\"/></testsuite>" >> report.xml
+    Compute:
+      Type: EC2
+    DependsOn:
+      - Build_a4
+  AWSCDKdeploy_77:
+    # Identifies the action. Do not modify this value.
+    Identifier: aws/cdk-deploy@v1.0.4
+
+    # Specifies the source and/or artifacts to pass to the action as input.
+    Inputs:
+      # Optional
+      Sources:
+        - WorkflowSource # This specifies that the action requires this Workflow as a source
+
+    # Required; You can use an environment, AWS account connection, and role to access AWS resources.
+    Environment:
+      Name:
+      Connections:
+        - Name:
+          Role:
+
+            # Defines the action's properties.
+    Configuration:
+      # Required; type: string; description: Name of the stack to deploy
+      StackName:
+
+
+  AWSCDKbootstrap_90:
+    # Identifies the action. Do not modify this value.
+    Identifier: aws/cdk-bootstrap@v1.0.3
+
+    # Specifies the source and/or artifacts to pass to the action as input.
+    Inputs:
+      # Optional
+      Sources:
+        - WorkflowSource # This specifies that the action requires this Workflow as a source
+
+    # Required; You can use an environment, AWS account connection, and role to access AWS resources.
+    Environment:
+      Name:
+      Connections:
+        - Name:
+          Role:
+
+            # Defines the action's properties.
+    Configuration:
+      # Required; type: string; description: AWS region to bootstrap
+      Region:
+
+
